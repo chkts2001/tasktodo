@@ -5,10 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tasktodo.domain.entity.TaskEntity
-import com.example.tasktodo.domain.usecase.GetTaskUseCase
+import com.example.tasktodo.domain.usecase.TaskReadUseCase
+import com.example.tasktodo.domain.usecase.TaskWriteUseCase
 import kotlinx.coroutines.launch
 
-class TaskViewModel(private val getTaskUseCase: GetTaskUseCase): ViewModel() {
+class TaskReadViewModel(private val taskReadUseCase: TaskReadUseCase): ViewModel() {
     val task = mutableStateListOf<TaskEntity>()
     val isLoad = mutableStateOf(false)
     val error = mutableStateOf<String?>(null)
@@ -18,7 +19,7 @@ class TaskViewModel(private val getTaskUseCase: GetTaskUseCase): ViewModel() {
             isLoad.value = true
             error.value = null
             try{
-                val response = getTaskUseCase()
+                val response = taskReadUseCase()
                 task.clear()
                 task.addAll(response)
             }catch(e: Exception){
@@ -28,4 +29,8 @@ class TaskViewModel(private val getTaskUseCase: GetTaskUseCase): ViewModel() {
             }
         }
     }
+}
+
+class TaskWriteViewModel(private val taskWriteUseCase: TaskWriteUseCase): ViewModel(){
+
 }

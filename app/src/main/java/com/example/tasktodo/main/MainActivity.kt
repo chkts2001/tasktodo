@@ -1,4 +1,4 @@
-package com.example.tasktodo
+package com.example.tasktodo.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
