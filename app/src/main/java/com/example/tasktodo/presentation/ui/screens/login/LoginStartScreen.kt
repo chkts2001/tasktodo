@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
@@ -34,14 +35,12 @@ import androidx.compose.ui.unit.sp
 import com.example.tasktodo.presentation.ui.widgets.ErrorField
 import com.example.tasktodo.presentation.viewmodel.GetUserViewModels
 import com.example.tasktodo.presentation.ui.widgets.LoginEditField
+import com.example.tasktodo.presentation.viewmodel.MainViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginStartScreen(){
+fun LoginStartScreen(loginStatus: MainViewModel){
     val loginViewModel: GetUserViewModels = koinViewModel()
-    val user by loginViewModel.user
-    val tag by loginViewModel.tag
-    val password by loginViewModel.password
     val isLoading by loginViewModel.isLoadLogin
     val isError by loginViewModel.errorLogin
     val color = Color.DarkGray
@@ -70,7 +69,7 @@ fun LoginStartScreen(){
             }
             Box(Modifier.padding(3.dp)){
                 Button(modifier = Modifier.fillMaxWidth().height(40.dp).border(BorderStroke(3.dp, color),
-                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)), colors = ButtonColors(Color.Transparent, color, Color.LightGray, color), onClick = {loginViewModel.loadUser()}){
+                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)), colors = ButtonColors(Color.Transparent, color, Color.LightGray, color), onClick = {loginStatus.updateStatusLogin(false)}){
                     Text("Регистрация", color= color)
                 }
             }

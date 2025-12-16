@@ -4,26 +4,28 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import retrofit2.HttpException
 import com.example.tasktodo.domain.entity.UserEntity
-import com.example.tasktodo.domain.usecase.GetUserUseCase
-import com.example.tasktodo.domain.usecase.SetUserUseCase
+import com.example.tasktodo.domain.usecase.GetUserProfileUseCase
+import com.example.tasktodo.domain.usecase.CreateUserUseCase
+import com.example.tasktodo.domain.usecase.GetUserTagUseCase
 import kotlinx.coroutines.launch
 
 
-class GetUserViewModels(private val getUserUseCase: GetUserUseCase): ViewModel(){
+class GetUserViewModels(private val getUserUseCase: GetUserProfileUseCase): ViewModel(){
     val user = mutableStateOf<UserEntity?>(null)
     val tag = mutableStateOf("")
     val password = mutableStateOf("")
     val isLoadLogin = mutableStateOf(false)
     val errorLogin = mutableStateOf<String?>(null)
 
-    fun logTagUpdate(str: String){
-        tag.value = str
-    }
-
-    fun logPasswordUpdate(str: String){
-        password.value = str
-    }
+//    fun logTagUpdate(str: String){
+//        tag.value = str
+//    }
+//
+//    fun logPasswordUpdate(str: String){
+//        password.value = str
+//    }
 
     fun loadUser(){
         viewModelScope.launch {
@@ -40,6 +42,12 @@ class GetUserViewModels(private val getUserUseCase: GetUserUseCase): ViewModel()
                 }
                 if(user.value == null) throw IllegalArgumentException("HTTP 404 ")
                 Log.d("debug", "login success:\nlogin (tag): ${user.value!!.tag}\npassword: ${user.value!!.password}")
+            }catch (e: HttpException) {
+                when (e.code()) {
+                    404 -> {
+                        errorLogin.value = "Неверный логин или пароль"
+                    }
+                }
             }catch(e: Exception){
                 Log.d("debug", "Ошибка: ${e.message}")
                 errorLogin.value = e.message
@@ -49,30 +57,62 @@ class GetUserViewModels(private val getUserUseCase: GetUserUseCase): ViewModel()
         }
     }
 }
-class SetUserViewModels(private val setUserUseCase: SetUserUseCase): ViewModel(){
+class SetUserViewModels(private val createUserUseCase: CreateUserUseCase, private val getUserTagUseCase: GetUserTagUseCase): ViewModel(){
+    val currentUser = mutableStateOf<UserEntity?>(null)
     val tag = mutableStateOf("")
     val password = mutableStateOf("")
     val email = mutableStateOf("")
-    val avatar = mutableStateOf("")
+    //val avatar = mutableStateOf("")
 
     val isCorrect = mutableStateOf(true)
     val isLoadReg = mutableStateOf(false)
     val errorReg = mutableStateOf<String?>(null)
 
-    fun regTagUpdate(str: String){
-        tag.value = str;
+    fun regUser(){
+        viewModelScope.launch {
+            errorReg.value = null
+            try {
+                isLoadReg.value = true
+                val checkTag = getUserTagUseCase(tag.value)
+                for (user in checkTag) {
+                    if (tag.value == user.tag) throw IllegalArgumentException("Имя @${tag.value} уже занято")
+                }
+            }catch (e: HttpException){
+                when(e.code()){
+                    404 -> {
+                        val user = UserEntity(tag.value, email.value, password.value, "")
+                        val responseCreate = createUserUseCase(user)
+                        currentUser.value = responseCreate
+                        if (currentUser.value == null) {
+                            throw IllegalArgumentException("Ошибка регистрации. Попробуйте еще раз")
+                        }
+                    }
+                }
+            }catch(e: Exception){
+                Log.d("debug", "Ошибка: ${e.message}")
+                errorReg.value = e.message
+            }finally {
+                isLoadReg.value = false
+            }
+        }
+
+
     }
 
-    fun regPasswordUpdate(str: String) {
-        password.value = str
-    }
-
-    fun regEmailUpdate(str: String){
-        email.value = str
-    }
-    fun regAvatarUpdate(str: String){
-        avatar.value = str
-    }
+//    fun regTagUpdate(str: String){
+//        tag.value = str;
+//    }
+//
+//    fun regPasswordUpdate(str: String) {
+//        password.value = str
+//    }
+//
+//    fun regEmailUpdate(str: String){
+//        email.value = str
+//    }
+//    fun regAvatarUpdate(str: String){
+//        avatar.value = str
+//    }
 
 
 }

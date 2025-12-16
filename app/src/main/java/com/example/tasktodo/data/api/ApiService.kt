@@ -14,7 +14,10 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET("users")
-    suspend fun getUserInfo(@Query(value = "id") id: String, @Query(value = "password") password: String): List<UserDto>
+    suspend fun getUserProfile(@Query(value = "tag") id: String, @Query(value = "password") password: String): List<UserDto>
+
+    @GET("users")
+    suspend fun getUserTag(@Query(value = "tag") tag: String): List<UserDto>
 
     @POST("users")
     suspend fun createUser(@Body user: UserEntity): UserDto

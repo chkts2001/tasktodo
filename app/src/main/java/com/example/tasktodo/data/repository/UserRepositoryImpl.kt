@@ -3,17 +3,16 @@ package com.example.tasktodo.data.repository
 import com.example.tasktodo.data.api.ApiService
 import com.example.tasktodo.data.api.mapper.toEntity
 import com.example.tasktodo.domain.entity.UserEntity
-import com.example.tasktodo.domain.repository.GetUserRepository
-import com.example.tasktodo.domain.repository.SetUserRepository
-import com.example.tasktodo.domain.repository.TaskReadRepository
+import com.example.tasktodo.domain.repository.UserRepository
 
-class GetUserRepositoryImpl(private val apiService: ApiService): GetUserRepository {
-    override suspend fun getUserInfo(id: String, password: String): List<UserEntity>{
-        return apiService.getUserInfo(id, password).map{it.toEntity()}
+class UserRepositoryImpl(private val apiService: ApiService): UserRepository{
+    override suspend fun getUserProfile(id: String, password: String): List<UserEntity>{
+        return apiService.getUserProfile(id, password).map{it.toEntity()}
     }
-}
 
-class SetUserRepositoryImpl(private val apiService: ApiService): SetUserRepository{
+    override suspend fun getUserTag(tag: String): List<UserEntity> {
+        return apiService.getUserTag(tag).map{it.toEntity()}
+    }
     override suspend fun createUser(user: UserEntity): UserEntity {
         return apiService.createUser(user).toEntity()
     }

@@ -34,13 +34,13 @@ fun LoginEditField(modifier: Modifier, str: MutableState<String>, typeField: Str
 @Composable
 fun ErrorField(modifier: Modifier, type: String){
     Box(modifier.fillMaxWidth().border(BorderStroke(3.dp, Color.Red), RoundedCornerShape(10.dp)).background(color = Color.Transparent, shape = RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)).padding(10.dp)){
-        Text(getTypeError(type), color = Color.Red, fontSize = 14.sp, textAlign = TextAlign.Start)
+        Text(type, color = Color.Red, fontSize = 14.sp, textAlign = TextAlign.Start)
     }
 }
 
-fun getTypeError(type: String): String{
-    return when(type){
-        "HTTP 404 " -> "Неверный логин или пароль"
-        else -> {"Неизвестная ошибка. Смотрите лог DEBUG"}
-    }
-}
+//fun getTypeError(type: String): String{
+//    return when(type){
+//        "HTTP 404 " -> "Неверный логин или пароль"
+//        else -> {"Неизвестная ошибка. Смотрите лог DEBUG"}
+//    }
+//}

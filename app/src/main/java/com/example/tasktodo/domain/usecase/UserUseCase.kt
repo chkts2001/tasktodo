@@ -1,15 +1,19 @@
 package com.example.tasktodo.domain.usecase
 
 import com.example.tasktodo.domain.entity.UserEntity
-import com.example.tasktodo.domain.repository.GetUserRepository
-import com.example.tasktodo.domain.repository.SetUserRepository
+import com.example.tasktodo.domain.repository.UserRepository
 
-class GetUserUseCase(private val userRepository: GetUserRepository) {
+class GetUserProfileUseCase(private val userRepository: UserRepository) {
     suspend operator fun invoke(user: String, password: String): List<UserEntity>{
-        return userRepository.getUserInfo(user, password)
+        return userRepository.getUserProfile(user, password)
     }
 }
-class SetUserUseCase(private val setUserRepository: SetUserRepository){
+class GetUserTagUseCase(private val userRepository: UserRepository) {
+    suspend operator fun invoke(user: String): List<UserEntity>{
+        return userRepository.getUserTag(user)
+    }
+}
+class CreateUserUseCase(private val setUserRepository: UserRepository){
     suspend operator fun invoke(user: UserEntity): UserEntity{
         return setUserRepository.createUser(user)
     }
