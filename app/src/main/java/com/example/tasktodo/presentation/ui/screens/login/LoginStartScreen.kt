@@ -1,0 +1,84 @@
+package com.example.tasktodo.presentation.ui.screens.login
+
+import android.widget.Button
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.tasktodo.presentation.ui.widgets.ErrorField
+import com.example.tasktodo.presentation.viewmodel.GetUserViewModels
+import com.example.tasktodo.presentation.ui.widgets.LoginEditField
+import org.koin.androidx.compose.koinViewModel
+
+@Composable
+fun LoginStartScreen(){
+    val loginViewModel: GetUserViewModels = koinViewModel()
+    val user by loginViewModel.user
+    val tag by loginViewModel.tag
+    val password by loginViewModel.password
+    val isLoading by loginViewModel.isLoadLogin
+    val isError by loginViewModel.errorLogin
+    val color = Color.DarkGray
+
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(screenWidth / 2)) {
+            Box(Modifier.padding(3.dp)){
+                Text("Вход", fontSize = 26.sp, color = Color.Black, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+            }
+            Box(Modifier.padding(3.dp)){
+                LoginEditField(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, color),
+                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginViewModel.tag, "Логин")
+            }
+            Box(Modifier.padding(3.dp)){
+                LoginEditField(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, color),
+                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginViewModel.password, "Пароль")
+            }
+            Box(Modifier.padding(3.dp)){
+                Button(modifier = Modifier.fillMaxWidth().height(40.dp).border(BorderStroke(3.dp, color),
+                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)), colors = ButtonColors(Color.Transparent, color, Color.LightGray, color), onClick = {loginViewModel.loadUser()}) {
+                    Text("Войти", color = color)
+                }
+            }
+            Box(Modifier.padding(3.dp)){
+                Button(modifier = Modifier.fillMaxWidth().height(40.dp).border(BorderStroke(3.dp, color),
+                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)), colors = ButtonColors(Color.Transparent, color, Color.LightGray, color), onClick = {loginViewModel.loadUser()}){
+                    Text("Регистрация", color= color)
+                }
+            }
+            if(isError != null){
+                Box(Modifier.padding(3.dp)){
+                    ErrorField(modifier = Modifier.fillMaxWidth().height(40.dp),isError!!)
+                }
+            }
+        }
+    }
+}

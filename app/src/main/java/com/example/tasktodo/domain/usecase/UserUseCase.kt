@@ -5,8 +5,8 @@ import com.example.tasktodo.domain.repository.GetUserRepository
 import com.example.tasktodo.domain.repository.SetUserRepository
 
 class GetUserUseCase(private val userRepository: GetUserRepository) {
-    suspend operator fun invoke(user: String): UserEntity{
-        return userRepository.getUserInfo(user)
+    suspend operator fun invoke(user: String, password: String): List<UserEntity>{
+        return userRepository.getUserInfo(user, password)
     }
 }
 class SetUserUseCase(private val setUserRepository: SetUserRepository){

@@ -14,13 +14,15 @@ import com.example.tasktodo.domain.usecase.GetUserUseCase
 import com.example.tasktodo.domain.usecase.SetUserUseCase
 import com.example.tasktodo.domain.usecase.TaskReadUseCase
 import com.example.tasktodo.domain.usecase.TaskWriteUseCase
+import com.example.tasktodo.presentation.viewmodel.GetUserViewModels
+import com.example.tasktodo.presentation.viewmodel.SetUserViewModels
 import com.example.tasktodo.presentation.viewmodel.TaskReadViewModel
 import com.example.tasktodo.presentation.viewmodel.TaskWriteViewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val MOCK_URL = "https://mockapi.io/projects/693bef54b762a4f15c3ed222"
+private const val MOCK_URL = "https://693bef54b762a4f15c3ed221.mockapi.io/"
 
 val dataModule = module {
     single<Retrofit> {
@@ -47,6 +49,8 @@ val domainModule = module{
 val presentationModule = module{
     viewModel { TaskReadViewModel(get<TaskReadUseCase>()) }
     viewModel { TaskWriteViewModel(get<TaskWriteUseCase>())}
+    viewModel { GetUserViewModels(get<GetUserUseCase>())}
+    viewModel { SetUserViewModels(get<SetUserUseCase>()) }
 }
 
 val appModules = listOf(dataModule, domainModule, presentationModule)

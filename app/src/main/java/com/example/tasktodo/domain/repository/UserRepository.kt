@@ -3,7 +3,7 @@ package com.example.tasktodo.domain.repository
 import com.example.tasktodo.domain.entity.UserEntity
 
 interface GetUserRepository {
-    suspend fun getUserInfo(id: String): UserEntity
+    suspend fun getUserInfo(id: String, password: String): List<UserEntity>
 }
 
 interface SetUserRepository {

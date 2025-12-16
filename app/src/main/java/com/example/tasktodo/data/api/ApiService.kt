@@ -9,31 +9,32 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService {
-    @GET("/user/{id}")
-    suspend fun getUserInfo(@Path(value = "id") id: String): UserDto
+    @GET("users")
+    suspend fun getUserInfo(@Query(value = "id") id: String, @Query(value = "password") password: String): List<UserDto>
 
-    @POST("/user")
+    @POST("users")
     suspend fun createUser(@Body user: UserEntity): UserDto
 
-    @PUT("/user/{id}")
+    @PUT("users/{id}")
     suspend fun updateUserInfo(@Path(value = "id") id: String, @Body user: UserEntity): UserDto
 
-    @DELETE("/user/{id}")
+    @DELETE("users/{id}")
     suspend fun deleteUser(@Path(value = "id") id: String)
 
 
-    @GET("/task")
+    @GET("task")
     suspend fun getTask(): List<TaskDto>
-    @GET("/task/{id}")
+    @GET("task/{id}")
     suspend fun getTaskById(@Path("id") id: String): TaskDto
-    @POST("/task")
+    @POST("task")
     suspend fun createTask(@Body task: TaskEntity): TaskDto
-    @PUT("/task/{id}")
+    @PUT("task/{id}")
     suspend fun updateTask(@Path("id") id: String, @Body task: TaskEntity): TaskDto
-    @DELETE("/task/{id}")
+    @DELETE("task/{id}")
     suspend fun deleteTask(@Path("id") id: String)
 
 }
