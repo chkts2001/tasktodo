@@ -4,11 +4,13 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import com.example.tasktodo.data.api.ApiService
 import com.example.tasktodo.data.repository.CustomDataValidatorImpl
 import com.example.tasktodo.data.repository.LoginRepositoryImpl
+import com.example.tasktodo.data.repository.RegRepositoryImpl
 import com.example.tasktodo.data.repository.UserRepositoryImpl
 import com.example.tasktodo.data.repository.TaskReadRepositoryImpl
 import com.example.tasktodo.data.repository.TaskWriteRepositoryImpl
 import com.example.tasktodo.domain.repository.CustomDataValidator
 import com.example.tasktodo.domain.repository.LoginRepository
+import com.example.tasktodo.domain.repository.RegRepository
 import com.example.tasktodo.domain.repository.UserRepository
 import com.example.tasktodo.domain.repository.TaskReadRepository
 import com.example.tasktodo.domain.repository.TaskWriteRepository
@@ -39,6 +41,7 @@ val dataModule = module {
     single<TaskReadRepository> { TaskReadRepositoryImpl(get()) }
     single<UserRepository> { UserRepositoryImpl(get())}
     single<LoginRepository> { LoginRepositoryImpl(get()) }
+    single<RegRepository> { RegRepositoryImpl(get()) }
     single<CustomDataValidator> { CustomDataValidatorImpl() }
 
 }
@@ -47,7 +50,7 @@ val domainModule = module{
     factory{ TaskReadUseCase(get<TaskReadRepository>()) }
     factory { TaskWriteUseCase(get<TaskWriteRepository>()) }
     factory { LoginAccountUseCase(get<LoginRepository>(), get<CustomDataValidator>()) }
-    factory { RegistrationAccountUseCase(get<UserRepository>(), get<CustomDataValidator>()) }
+    factory { RegistrationAccountUseCase(get<RegRepository>(), get<CustomDataValidator>()) }
 }
 
 val presentationModule = module{

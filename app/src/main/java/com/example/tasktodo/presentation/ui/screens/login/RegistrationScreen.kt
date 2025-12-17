@@ -65,7 +65,7 @@ fun RegistrationScreen(loginState: MainViewModel){
             Box(Modifier.padding(3.dp)) {
                 LoginEditField(
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
-                        BorderStroke(3.dp, color),
+                        BorderStroke(3.dp, if(regViewModel.tag.value.isBlank() && !regState.isCorrect) Color.Red else color),
                         RoundedCornerShape(10.dp)
                     ).clip(RoundedCornerShape(10.dp)), regViewModel.tag, "Логин*"
                 )
@@ -73,7 +73,7 @@ fun RegistrationScreen(loginState: MainViewModel){
             Box(Modifier.padding(3.dp)) {
                 LoginEditField(
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
-                        BorderStroke(3.dp, color),
+                        BorderStroke(3.dp, if(regViewModel.password.value.isBlank() && !regState.isCorrect) Color.Red else color),
                         RoundedCornerShape(10.dp)
                     ).clip(RoundedCornerShape(10.dp)), regViewModel.password, "Пароль*"
                 )
@@ -81,7 +81,7 @@ fun RegistrationScreen(loginState: MainViewModel){
             Box(Modifier.padding(3.dp)) {
                 LoginEditField(
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
-                        BorderStroke(3.dp, color),
+                        BorderStroke(3.dp, if(regViewModel.email.value.isBlank() && !regState.isCorrect) Color.Red else color),
                         RoundedCornerShape(10.dp)
                     ).clip(RoundedCornerShape(10.dp)), regViewModel.email, "Почта*"
                 )

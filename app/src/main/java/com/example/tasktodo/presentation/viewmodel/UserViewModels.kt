@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tasktodo.domain.entity.UserEntity
+import com.example.tasktodo.domain.error.LoginError
+import com.example.tasktodo.domain.error.RegError
 import com.example.tasktodo.domain.usecase.LoginAccountUseCase
 import com.example.tasktodo.domain.usecase.RegistrationAccountUseCase
 import com.example.tasktodo.presentation.states.LoginState
@@ -31,14 +33,18 @@ class LoginViewModels(private val loginUseCase: LoginAccountUseCase): ViewModel(
                 },
                 onFailure = {e ->
                     Log.d("debug", "Ошибка: ${e.message}")
-                    uiState.value.copy(isLoadLogin = false)
-                    when(e.message){
-                        "1", "2", "3" -> uiState.value.copy(isCorrectState = e.message.toString().toInt(), errorLogin = "Введены некорректные данные")
-                        else -> uiState.value.copy(errorLogin = e.message)
+
+                    val error = result.exceptionOrNull()
+                    val(errorLogin, correctSate) = when(error){
+                        is LoginError.MissingTag -> "Введите логин" to 1
+                        is LoginError.MissingPassword -> "Введите пароль" to 2
+                        is LoginError.MissingBothParam -> "Введите логин и пароль" to 3
+                        is LoginError.ErrorNotFound -> "Неверный логин или пароль" to null
+                        is LoginError.NetworkError -> "Ошибка сети: ${error.cause!!.message}" to null
+                        else -> "Неизвестная ошибка. Смотрте лог DEBUG" to null
                     }
-
+                    uiState.value.copy(isLoadLogin = false, isCorrectState = correctSate, errorLogin = errorLogin)
                 }
-
             )
         }
     }
@@ -56,7 +62,7 @@ class RegAccountViewModels(private val regUseCase: RegistrationAccountUseCase): 
     //val avatar = mutableStateOf("")
     fun regUser() {
         viewModelScope.launch {
-            uiState.value = uiState.value.copy(isLoadReg = true, errorReg = null)
+            uiState.value = uiState.value.copy(isLoadReg = true, errorReg = null, isCorrect = true)
             val formedEntity = UserEntity(
                 tag.value,
                 email.value,
@@ -67,10 +73,17 @@ class RegAccountViewModels(private val regUseCase: RegistrationAccountUseCase): 
             val result = regUseCase(formedEntity)
             uiState.value = result.fold(
                 onSuccess = { currentUser ->
-                    uiState.value.copy(isLoadReg = false, currentUser = currentUser)
+                    uiState.value.copy(isLoadReg = false, currentUser = currentUser, isCorrect = true)
                 },
                 onFailure = { e ->
-                    uiState.value.copy(isLoadReg = false, errorReg = e.message)
+                    val error = result.exceptionOrNull()
+                    val(errorMes, isCorrect) = when(error){
+                        is RegError.MissingBothParam -> "Поле с * незаполнено" to false
+                        is RegError.NameOccupied -> "Имя @${error.cause!!.message} уже занято" to false
+                        is RegError.NetworkError -> error.cause!!.message to false
+                        else -> error!!.cause!!.message to false
+                    }
+                    uiState.value.copy(isLoadReg = false, errorReg = errorMes, isCorrect = isCorrect)
                 }
             )
         }
