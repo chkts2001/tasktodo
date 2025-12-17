@@ -8,5 +8,6 @@ fun UserDto.toEntity(): UserEntity = UserEntity(
     tag = tag,
     email = email,
     password = password,
-    avatar = avatar
+    avatar = avatar,
+    personal = personal
 )

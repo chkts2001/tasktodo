@@ -6,10 +6,6 @@ import com.example.tasktodo.domain.entity.UserEntity
 import com.example.tasktodo.domain.repository.UserRepository
 
 class UserRepositoryImpl(private val apiService: ApiService): UserRepository{
-    override suspend fun getUserProfile(id: String, password: String): List<UserEntity>{
-        return apiService.getUserProfile(id, password).map{it.toEntity()}
-    }
-
     override suspend fun getUserTag(tag: String): List<UserEntity> {
         return apiService.getUserTag(tag).map{it.toEntity()}
     }

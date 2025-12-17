@@ -1,8 +1,6 @@
 package com.example.tasktodo.presentation.ui.screens.login
 
-import android.widget.Button
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,32 +15,27 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tasktodo.presentation.ui.widgets.ErrorField
-import com.example.tasktodo.presentation.viewmodel.GetUserViewModels
-import com.example.tasktodo.presentation.ui.widgets.LoginEditField
+import com.example.tasktodo.presentation.viewmodel.LoginViewModels
+import com.example.tasktodo.presentation.ui.widgets.LoginEditFieldNullable
+import com.example.tasktodo.presentation.ui.widgets.LoginLoadField
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginStartScreen(loginStatus: MainViewModel){
-    val loginViewModel: GetUserViewModels = koinViewModel()
-    val isLoading by loginViewModel.isLoadLogin
-    val isError by loginViewModel.errorLogin
+    val loginViewModel: LoginViewModels = koinViewModel()
+    val state by loginViewModel.uiState
     val color = Color.DarkGray
 
     val configuration = LocalConfiguration.current
@@ -54,11 +47,11 @@ fun LoginStartScreen(loginStatus: MainViewModel){
                 Text("Вход", fontSize = 26.sp, color = Color.Black, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
             }
             Box(Modifier.padding(3.dp)){
-                LoginEditField(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, color),
+                LoginEditFieldNullable(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, if(state.isCorrectState in listOf(1, 3)) Color.Red else color),
                     RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginViewModel.tag, "Логин")
             }
             Box(Modifier.padding(3.dp)){
-                LoginEditField(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, color),
+                LoginEditFieldNullable(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, if(state.isCorrectState in listOf(2, 3)) Color.Red else color),
                     RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginViewModel.password, "Пароль")
             }
             Box(Modifier.padding(3.dp)){
@@ -73,11 +66,14 @@ fun LoginStartScreen(loginStatus: MainViewModel){
                     Text("Регистрация", color= color)
                 }
             }
-            if(isError != null){
-                Box(Modifier.padding(3.dp)){
-                    ErrorField(modifier = Modifier.fillMaxWidth().height(40.dp),isError!!)
+            Box(Modifier.padding(3.dp).height(60.dp)){
+                if(state.errorLogin != null){
+                    ErrorField(modifier = Modifier.fillMaxWidth().height(60.dp),state.errorLogin!!)
+                }else if(state.isLoadLogin){
+                    LoginLoadField("Попытка входа", modifier = Modifier.fillMaxWidth().height(60.dp))
                 }
             }
+
         }
     }
 }

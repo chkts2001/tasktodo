@@ -7,4 +7,5 @@ data class UserEntity(
     val email: String,
     val password: String,
     val avatar: String,
+    val personal: List<String>
 )

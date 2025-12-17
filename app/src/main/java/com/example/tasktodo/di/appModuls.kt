@@ -2,20 +2,23 @@ package com.example.tasktodo.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import com.example.tasktodo.data.api.ApiService
+import com.example.tasktodo.data.repository.CustomDataValidatorImpl
+import com.example.tasktodo.data.repository.LoginRepositoryImpl
 import com.example.tasktodo.data.repository.UserRepositoryImpl
 import com.example.tasktodo.data.repository.TaskReadRepositoryImpl
 import com.example.tasktodo.data.repository.TaskWriteRepositoryImpl
+import com.example.tasktodo.domain.repository.CustomDataValidator
+import com.example.tasktodo.domain.repository.LoginRepository
 import com.example.tasktodo.domain.repository.UserRepository
 import com.example.tasktodo.domain.repository.TaskReadRepository
 import com.example.tasktodo.domain.repository.TaskWriteRepository
-import com.example.tasktodo.domain.usecase.GetUserProfileUseCase
-import com.example.tasktodo.domain.usecase.CreateUserUseCase
-import com.example.tasktodo.domain.usecase.GetUserTagUseCase
+import com.example.tasktodo.domain.usecase.LoginAccountUseCase
+import com.example.tasktodo.domain.usecase.RegistrationAccountUseCase
 import com.example.tasktodo.domain.usecase.TaskReadUseCase
 import com.example.tasktodo.domain.usecase.TaskWriteUseCase
-import com.example.tasktodo.presentation.viewmodel.GetUserViewModels
+import com.example.tasktodo.presentation.viewmodel.LoginViewModels
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
-import com.example.tasktodo.presentation.viewmodel.SetUserViewModels
+import com.example.tasktodo.presentation.viewmodel.RegAccountViewModels
 import com.example.tasktodo.presentation.viewmodel.TaskReadViewModel
 import com.example.tasktodo.presentation.viewmodel.TaskWriteViewModel
 import org.koin.dsl.module
@@ -34,24 +37,25 @@ val dataModule = module {
     single<ApiService>{get<Retrofit>().create(ApiService::class.java) }
     single<TaskWriteRepository> { TaskWriteRepositoryImpl(get()) }
     single<TaskReadRepository> { TaskReadRepositoryImpl(get()) }
-    single<UserRepository> { UserRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get())}
+    single<LoginRepository> { LoginRepositoryImpl(get()) }
+    single<CustomDataValidator> { CustomDataValidatorImpl() }
 
 }
 
 val domainModule = module{
     factory{ TaskReadUseCase(get<TaskReadRepository>()) }
     factory { TaskWriteUseCase(get<TaskWriteRepository>()) }
-    factory { GetUserProfileUseCase(get<UserRepository>()) }
-    factory { GetUserTagUseCase(get<UserRepository>())}
-    factory { CreateUserUseCase(get<UserRepository>()) }
+    factory { LoginAccountUseCase(get<LoginRepository>(), get<CustomDataValidator>()) }
+    factory { RegistrationAccountUseCase(get<UserRepository>(), get<CustomDataValidator>()) }
 }
 
 val presentationModule = module{
     viewModel { MainViewModel() }
     viewModel { TaskReadViewModel(get<TaskReadUseCase>()) }
     viewModel { TaskWriteViewModel(get<TaskWriteUseCase>())}
-    viewModel { GetUserViewModels(get<GetUserProfileUseCase>())}
-    viewModel { SetUserViewModels(get<CreateUserUseCase>(), get<GetUserTagUseCase>()) }
+    viewModel { LoginViewModels(get<LoginAccountUseCase>())}
+    viewModel { RegAccountViewModels(get<RegistrationAccountUseCase>()) }
 }
 
 val appModules = listOf(dataModule, domainModule, presentationModule)
