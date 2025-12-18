@@ -9,20 +9,22 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.tasktodo.presentation.states.RegistrationState
 
 @Composable
 fun LoginEditFieldNullable(modifier: Modifier, str: MutableState<String?>, typeField: String) {
     Box(Modifier.padding(vertical = 3.dp)) {
-        TextField(value = if(str.value == null) "" else str.value!!, {str.value = it}, modifier = modifier, label = {
+        TextField(value = if(str.value == null) "" else str.value!!,
+            {str.value = it}, modifier = modifier, label = {
             Text(typeField, textAlign = TextAlign.Start, modifier = Modifier.padding(horizontal = 3.dp))
         })
     }
 }
 
 @Composable
-fun LoginEditField(modifier: Modifier, str: MutableState<String>, typeField: String) {
+fun LoginEditField(modifier: Modifier, value: String, valueChange: (String) -> Unit, typeField: String) {
     Box(Modifier.padding(vertical = 3.dp)) {
-        TextField(value = str.value, {str.value = it}, modifier = modifier, label = {
+        TextField(value = value, onValueChange = valueChange, modifier = modifier, label = {
             Text(typeField, textAlign = TextAlign.Start, modifier = Modifier.padding(horizontal = 3.dp))
         })
     }

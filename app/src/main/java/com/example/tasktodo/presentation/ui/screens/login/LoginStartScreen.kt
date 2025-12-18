@@ -26,7 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tasktodo.presentation.ui.widgets.ErrorField
-import com.example.tasktodo.presentation.viewmodel.LoginViewModels
+import com.example.tasktodo.presentation.ui.widgets.LoginEditField
+import com.example.tasktodo.presentation.viewmodel.loginViewModel.LoginViewModels
 import com.example.tasktodo.presentation.ui.widgets.LoginEditFieldNullable
 import com.example.tasktodo.presentation.ui.widgets.LoginLoadField
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
@@ -35,7 +36,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginStartScreen(loginStatus: MainViewModel){
     val loginViewModel: LoginViewModels = koinViewModel()
-    val state by loginViewModel.uiState
+    val loginState = loginViewModel.uiState
     val color = Color.DarkGray
 
     val configuration = LocalConfiguration.current
@@ -47,12 +48,12 @@ fun LoginStartScreen(loginStatus: MainViewModel){
                 Text("Вход", fontSize = 26.sp, color = Color.Black, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
             }
             Box(Modifier.padding(3.dp)){
-                LoginEditFieldNullable(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, if(state.isCorrectState in listOf(1, 3)) Color.Red else color),
-                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginViewModel.tag, "Логин")
+                LoginEditField(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, if(loginState.isCorrectState in listOf(1, 3)) Color.Red else color),
+                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginState.tag, loginViewModel::onTagChange,"Логин")
             }
             Box(Modifier.padding(3.dp)){
-                LoginEditFieldNullable(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, if(state.isCorrectState in listOf(2, 3)) Color.Red else color),
-                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginViewModel.password, "Пароль")
+                LoginEditField(modifier = Modifier.fillMaxWidth().height(60.dp).border(BorderStroke(3.dp, if(loginState.isCorrectState in listOf(2, 3)) Color.Red else color),
+                    RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)),loginState.password, loginViewModel::onPasswordChange,"Пароль")
             }
             Box(Modifier.padding(3.dp)){
                 Button(modifier = Modifier.fillMaxWidth().height(40.dp).border(BorderStroke(3.dp, color),
@@ -67,9 +68,9 @@ fun LoginStartScreen(loginStatus: MainViewModel){
                 }
             }
             Box(Modifier.padding(3.dp).height(60.dp)){
-                if(state.errorLogin != null){
-                    ErrorField(modifier = Modifier.fillMaxWidth().height(60.dp),state.errorLogin!!)
-                }else if(state.isLoadLogin){
+                if(loginState.errorLogin != null){
+                    ErrorField(modifier = Modifier.fillMaxWidth().height(60.dp),loginState.errorLogin)
+                }else if(loginState.isLoadLogin){
                     LoginLoadField("Попытка входа", modifier = Modifier.fillMaxWidth().height(60.dp))
                 }
             }

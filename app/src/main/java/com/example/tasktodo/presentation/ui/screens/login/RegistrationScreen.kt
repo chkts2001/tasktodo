@@ -29,19 +29,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tasktodo.domain.error.RegError
+import com.example.tasktodo.domain.error.RegErrorParam
 import com.example.tasktodo.presentation.ui.widgets.ErrorField
 import com.example.tasktodo.presentation.ui.widgets.LoginEditField
 import com.example.tasktodo.presentation.ui.widgets.LoginEditFieldNullable
 import com.example.tasktodo.presentation.ui.widgets.LoginLoadField
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
-import com.example.tasktodo.presentation.viewmodel.RegAccountViewModels
+import com.example.tasktodo.presentation.viewmodel.registrationViewModel.RegAccountViewModels
 import org.koin.androidx.compose.koinViewModel
 
 @Composable()
 fun RegistrationScreen(loginState: MainViewModel){
 
     val regViewModel: RegAccountViewModels = koinViewModel()
-    val regState by regViewModel.uiState
+    val regState = regViewModel.uiState
     val color = Color.DarkGray
 
     val configuration = LocalConfiguration.current
@@ -65,33 +67,25 @@ fun RegistrationScreen(loginState: MainViewModel){
             Box(Modifier.padding(3.dp)) {
                 LoginEditField(
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
-                        BorderStroke(3.dp, if(regViewModel.tag.value.isBlank() && !regState.isCorrect) Color.Red else color),
+                        BorderStroke(3.dp, if(regState.isTagError) Color.Red else color),
                         RoundedCornerShape(10.dp)
-                    ).clip(RoundedCornerShape(10.dp)), regViewModel.tag, "Логин*"
+                    ).clip(RoundedCornerShape(10.dp)), regState.tag, regViewModel::onTagChange, "Логин*"
                 )
             }
             Box(Modifier.padding(3.dp)) {
                 LoginEditField(
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
-                        BorderStroke(3.dp, if(regViewModel.password.value.isBlank() && !regState.isCorrect) Color.Red else color),
+                        BorderStroke(3.dp, if(regState.isPasswordError) Color.Red else color),
                         RoundedCornerShape(10.dp)
-                    ).clip(RoundedCornerShape(10.dp)), regViewModel.password, "Пароль*"
+                    ).clip(RoundedCornerShape(10.dp)), regState.password, regViewModel::onPasswordChange,"Пароль*"
                 )
             }
             Box(Modifier.padding(3.dp)) {
                 LoginEditField(
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
-                        BorderStroke(3.dp, if(regViewModel.email.value.isBlank() && !regState.isCorrect) Color.Red else color),
+                        BorderStroke(3.dp, if(regState.isEmailError) Color.Red else color),
                         RoundedCornerShape(10.dp)
-                    ).clip(RoundedCornerShape(10.dp)), regViewModel.email, "Почта*"
-                )
-            }
-            Box(Modifier.padding(3.dp)) {
-                LoginEditField(
-                    modifier = Modifier.fillMaxWidth().height(60.dp).border(
-                        BorderStroke(3.dp, color),
-                        RoundedCornerShape(10.dp)
-                    ).clip(RoundedCornerShape(10.dp)), regViewModel.name, "Имя"
+                    ).clip(RoundedCornerShape(10.dp)), regState.email, regViewModel::onEmailChange, "Почта*"
                 )
             }
             Box(Modifier.padding(3.dp)) {
@@ -99,7 +93,7 @@ fun RegistrationScreen(loginState: MainViewModel){
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
                         BorderStroke(3.dp, color),
                         RoundedCornerShape(10.dp)
-                    ).clip(RoundedCornerShape(10.dp)), regViewModel.surname, "Фамилия"
+                    ).clip(RoundedCornerShape(10.dp)), regState.name, regViewModel::onNameChange,"Имя"
                 )
             }
             Box(Modifier.padding(3.dp)) {
@@ -107,7 +101,15 @@ fun RegistrationScreen(loginState: MainViewModel){
                     modifier = Modifier.fillMaxWidth().height(60.dp).border(
                         BorderStroke(3.dp, color),
                         RoundedCornerShape(10.dp)
-                    ).clip(RoundedCornerShape(10.dp)), regViewModel.birthday, "Дата рождения"
+                    ).clip(RoundedCornerShape(10.dp)), regState.surname, regViewModel::onSurnameChange, "Фамилия"
+                )
+            }
+            Box(Modifier.padding(3.dp)) {
+                LoginEditField(
+                    modifier = Modifier.fillMaxWidth().height(60.dp).border(
+                        BorderStroke(3.dp, color),
+                        RoundedCornerShape(10.dp)
+                    ).clip(RoundedCornerShape(10.dp)), regState.birthday, regViewModel::onBirthDateChange, "Дата рождения"
                 )
             }
             Row() {

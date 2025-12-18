@@ -8,21 +8,24 @@ import com.example.tasktodo.data.repository.RegRepositoryImpl
 import com.example.tasktodo.data.repository.UserRepositoryImpl
 import com.example.tasktodo.data.repository.TaskReadRepositoryImpl
 import com.example.tasktodo.data.repository.TaskWriteRepositoryImpl
+import com.example.tasktodo.data.servise.LoginValidationServiceImpl
+import com.example.tasktodo.data.servise.RegValidationServiceImpl
 import com.example.tasktodo.domain.repository.CustomDataValidator
 import com.example.tasktodo.domain.repository.LoginRepository
 import com.example.tasktodo.domain.repository.RegRepository
 import com.example.tasktodo.domain.repository.UserRepository
 import com.example.tasktodo.domain.repository.TaskReadRepository
 import com.example.tasktodo.domain.repository.TaskWriteRepository
+import com.example.tasktodo.domain.service.RegValidationService
 import com.example.tasktodo.domain.usecase.LoginAccountUseCase
 import com.example.tasktodo.domain.usecase.RegistrationAccountUseCase
 import com.example.tasktodo.domain.usecase.TaskReadUseCase
 import com.example.tasktodo.domain.usecase.TaskWriteUseCase
-import com.example.tasktodo.presentation.viewmodel.LoginViewModels
+import com.example.tasktodo.presentation.viewmodel.loginViewModel.LoginViewModels
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
-import com.example.tasktodo.presentation.viewmodel.RegAccountViewModels
 import com.example.tasktodo.presentation.viewmodel.TaskReadViewModel
 import com.example.tasktodo.presentation.viewmodel.TaskWriteViewModel
+import com.example.tasktodo.presentation.viewmodel.registrationViewModel.RegAccountViewModels
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,14 +46,16 @@ val dataModule = module {
     single<LoginRepository> { LoginRepositoryImpl(get()) }
     single<RegRepository> { RegRepositoryImpl(get()) }
     single<CustomDataValidator> { CustomDataValidatorImpl() }
+    single<RegValidationService> { RegValidationServiceImpl(get(), get())}
+    single { LoginValidationServiceImpl(get(), get()) }
 
 }
 
 val domainModule = module{
     factory{ TaskReadUseCase(get<TaskReadRepository>()) }
     factory { TaskWriteUseCase(get<TaskWriteRepository>()) }
-    factory { LoginAccountUseCase(get<LoginRepository>(), get<CustomDataValidator>()) }
-    factory { RegistrationAccountUseCase(get<RegRepository>(), get<CustomDataValidator>()) }
+    factory { LoginAccountUseCase(get<CustomDataValidator>(), get<LoginValidationServiceImpl>()) }
+    factory { RegistrationAccountUseCase(get<RegRepository>(), get<CustomDataValidator>(), get<RegValidationService>()) }
 }
 
 val presentationModule = module{
