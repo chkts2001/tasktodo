@@ -1,4 +1,4 @@
-package com.example.tasktodo.presentation.ui.screens.login.registrationScreen
+package com.example.tasktodo.presentation.ui.screens.registrationScreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -28,10 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.tasktodo.presentation.ui.screens.login.registrationScreen.components.GridErrors
-import com.example.tasktodo.presentation.ui.widgets.ErrorField
-import com.example.tasktodo.presentation.ui.widgets.LoginEditField
-import com.example.tasktodo.presentation.ui.widgets.LoginLoadField
+import com.example.tasktodo.presentation.ui.screens.registrationScreen.components.GridErrors
+import com.example.tasktodo.presentation.ui.utils.componentSizeUtils
+import com.example.tasktodo.presentation.ui.components.LoginEditField
+import com.example.tasktodo.presentation.ui.components.LoginLoadField
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
 import com.example.tasktodo.presentation.viewmodel.registrationViewModel.RegAccountViewModels
 import org.koin.androidx.compose.koinViewModel
@@ -50,7 +50,7 @@ fun RegistrationScreen(loginState: MainViewModel){
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.width(screenWidth / 2)
+            modifier = Modifier.width(componentSizeUtils())
         ) {
             Box(Modifier.padding(3.dp)) {
                 Text(

@@ -4,11 +4,9 @@ import com.example.tasktodo.domain.entity.UserEntity
 import com.example.tasktodo.domain.error.RegError
 import com.example.tasktodo.domain.error.RegErrorParam
 import com.example.tasktodo.domain.repository.CustomDataValidator
-import com.example.tasktodo.domain.repository.RegRepository
 import com.example.tasktodo.domain.service.CheckParamCorrectService
 import com.example.tasktodo.domain.service.registarationService.RegValidationService
 import com.example.tasktodo.domain.service.registarationService.UserUniquenessCheckerService
-import com.example.tasktodo.presentation.ui.screens.login.registrationScreen.RegistrationScreen
 import retrofit2.HttpException
 
 class RegValidationServiceImpl(private val unqueness: UserUniquenessCheckerService, private val validator: CustomDataValidator, private val correctService: CheckParamCorrectService):

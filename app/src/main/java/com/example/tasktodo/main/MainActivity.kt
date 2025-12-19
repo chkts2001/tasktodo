@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.tasktodo.presentation.ui.screens.login.loginScreen.LoginStartScreen
-import com.example.tasktodo.presentation.ui.screens.login.registrationScreen.RegistrationScreen
+import com.example.tasktodo.presentation.ui.screens.loginScreen.LoginStartScreen
+import com.example.tasktodo.presentation.ui.screens.registrationScreen.RegistrationScreen
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
 import androidx.compose.runtime.getValue
 import org.koin.androidx.compose.koinViewModel
