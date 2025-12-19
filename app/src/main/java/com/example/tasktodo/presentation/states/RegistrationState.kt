@@ -17,5 +17,5 @@ data class RegistrationState(
     val isTagError: Boolean = false,
     val isPasswordError: Boolean = false,
     val isEmailError: Boolean = false,
-    val errorReg: String? = null,
+    val errorReg: List<String?> = emptyList(),
 )

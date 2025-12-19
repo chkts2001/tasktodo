@@ -8,15 +8,20 @@ import com.example.tasktodo.data.repository.RegRepositoryImpl
 import com.example.tasktodo.data.repository.UserRepositoryImpl
 import com.example.tasktodo.data.repository.TaskReadRepositoryImpl
 import com.example.tasktodo.data.repository.TaskWriteRepositoryImpl
+import com.example.tasktodo.data.servise.CheckParamCorrectServiceImpl
 import com.example.tasktodo.data.servise.LoginValidationServiceImpl
-import com.example.tasktodo.data.servise.RegValidationServiceImpl
+import com.example.tasktodo.data.servise.registrationServiceImpl.RegValidationServiceImpl
+import com.example.tasktodo.data.servise.registrationServiceImpl.UserUniquenessCheckerServiceImpl
 import com.example.tasktodo.domain.repository.CustomDataValidator
 import com.example.tasktodo.domain.repository.LoginRepository
 import com.example.tasktodo.domain.repository.RegRepository
 import com.example.tasktodo.domain.repository.UserRepository
 import com.example.tasktodo.domain.repository.TaskReadRepository
 import com.example.tasktodo.domain.repository.TaskWriteRepository
-import com.example.tasktodo.domain.service.RegValidationService
+import com.example.tasktodo.domain.service.CheckParamCorrectService
+import com.example.tasktodo.domain.service.LoginValidationService
+import com.example.tasktodo.domain.service.registarationService.RegValidationService
+import com.example.tasktodo.domain.service.registarationService.UserUniquenessCheckerService
 import com.example.tasktodo.domain.usecase.LoginAccountUseCase
 import com.example.tasktodo.domain.usecase.RegistrationAccountUseCase
 import com.example.tasktodo.domain.usecase.TaskReadUseCase
@@ -46,16 +51,18 @@ val dataModule = module {
     single<LoginRepository> { LoginRepositoryImpl(get()) }
     single<RegRepository> { RegRepositoryImpl(get()) }
     single<CustomDataValidator> { CustomDataValidatorImpl() }
-    single<RegValidationService> { RegValidationServiceImpl(get(), get())}
-    single { LoginValidationServiceImpl(get(), get()) }
+    single<CheckParamCorrectService> { CheckParamCorrectServiceImpl() }
+    single<RegValidationService> { RegValidationServiceImpl(get(), get(), get())}
+    single<UserUniquenessCheckerService> { UserUniquenessCheckerServiceImpl(get(), get(),)}
+    single<LoginValidationService> { LoginValidationServiceImpl(get(), get()) }
 
 }
 
 val domainModule = module{
     factory{ TaskReadUseCase(get<TaskReadRepository>()) }
     factory { TaskWriteUseCase(get<TaskWriteRepository>()) }
-    factory { LoginAccountUseCase(get<CustomDataValidator>(), get<LoginValidationServiceImpl>()) }
-    factory { RegistrationAccountUseCase(get<RegRepository>(), get<CustomDataValidator>(), get<RegValidationService>()) }
+    factory { LoginAccountUseCase(get<CustomDataValidator>(), get<LoginValidationService>()) }
+    factory { RegistrationAccountUseCase(get<RegRepository>(),  get<RegValidationService>()) }
 }
 
 val presentationModule = module{

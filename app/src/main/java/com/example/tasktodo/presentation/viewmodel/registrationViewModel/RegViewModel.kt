@@ -12,7 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
 data class StateError(
-    val message: String?,
+    val message: List<String?>,
     val errorTag: Boolean,
     val errorPassword: Boolean,
     val errorEmail: Boolean
@@ -43,7 +43,7 @@ class RegAccountViewModels(private val regUseCase: RegistrationAccountUseCase): 
     //val avatar = mutableStateOf("")
     fun regUser() {
         viewModelScope.launch {
-            uiState = uiState.copy(isLoadReg = true, errorReg = null, isTagError = false, isPasswordError = false, isEmailError = false)
+            uiState = uiState.copy(isLoadReg = true, errorReg = emptyList(), isTagError = false, isPasswordError = false, isEmailError = false)
             val formedEntity = UserEntity(uiState.tag, uiState.email, uiState.password, "", listOf(uiState.name, uiState.surname, uiState.birthday)
             )
             val result = regUseCase(formedEntity)

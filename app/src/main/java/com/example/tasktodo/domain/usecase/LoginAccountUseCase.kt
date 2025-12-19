@@ -4,7 +4,7 @@ import com.example.tasktodo.domain.entity.UserEntity
 import com.example.tasktodo.domain.error.LoginError
 import com.example.tasktodo.domain.repository.CustomDataValidator
 import com.example.tasktodo.domain.service.LoginValidationService
-import com.example.tasktodo.domain.service.RegValidationService
+import com.example.tasktodo.domain.service.registarationService.RegValidationService
 import retrofit2.HttpException
 
 class LoginAccountUseCase(private val validator: CustomDataValidator, private val service: LoginValidationService) {

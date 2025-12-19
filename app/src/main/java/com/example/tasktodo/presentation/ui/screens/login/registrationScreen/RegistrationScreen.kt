@@ -1,4 +1,4 @@
-package com.example.tasktodo.presentation.ui.screens.login
+package com.example.tasktodo.presentation.ui.screens.login.registrationScreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -18,7 +18,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,11 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.tasktodo.domain.error.RegError
-import com.example.tasktodo.domain.error.RegErrorParam
+import com.example.tasktodo.presentation.ui.screens.login.registrationScreen.components.GridErrors
 import com.example.tasktodo.presentation.ui.widgets.ErrorField
 import com.example.tasktodo.presentation.ui.widgets.LoginEditField
-import com.example.tasktodo.presentation.ui.widgets.LoginEditFieldNullable
 import com.example.tasktodo.presentation.ui.widgets.LoginLoadField
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
 import com.example.tasktodo.presentation.viewmodel.registrationViewModel.RegAccountViewModels
@@ -143,8 +140,9 @@ fun RegistrationScreen(loginState: MainViewModel){
 
             }
             Box(Modifier.padding(3.dp).height(60.dp)){
-                if(regState.errorReg != null){
-                    ErrorField(modifier = Modifier.fillMaxWidth().height(60.dp), regState.errorReg!!)
+                if(regState.errorReg.isNotEmpty()){
+                    GridErrors(regState.errorReg)
+                    //ErrorField(modifier = Modifier.fillMaxWidth().height(60.dp), regState.errorReg)
                 }else if(regState.isLoadReg){
                     LoginLoadField("Попытка регистрации", modifier = Modifier.fillMaxWidth().height(60.dp))
                 }

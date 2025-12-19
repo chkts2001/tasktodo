@@ -7,6 +7,9 @@ sealed class RegError: Throwable() {
     class MissingBothParam: RegError()
     class EmailOccupied: RegError()
     class NetworkError(cause: Throwable) : RegError()
+    class IncorrectPassword: RegError()
+    class IncorrectEmail: RegError()
+    class IncorrectInputParam: RegError()
 }
 
 sealed class RegErrorParam(message: String? = null): Exception(message){

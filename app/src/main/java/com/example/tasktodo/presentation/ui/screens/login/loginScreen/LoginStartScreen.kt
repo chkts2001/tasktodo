@@ -1,4 +1,4 @@
-package com.example.tasktodo.presentation.ui.screens.login
+package com.example.tasktodo.presentation.ui.screens.login.loginScreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import com.example.tasktodo.presentation.ui.widgets.ErrorField
 import com.example.tasktodo.presentation.ui.widgets.LoginEditField
 import com.example.tasktodo.presentation.viewmodel.loginViewModel.LoginViewModels
-import com.example.tasktodo.presentation.ui.widgets.LoginEditFieldNullable
 import com.example.tasktodo.presentation.ui.widgets.LoginLoadField
 import com.example.tasktodo.presentation.viewmodel.MainViewModel
 import org.koin.androidx.compose.koinViewModel
